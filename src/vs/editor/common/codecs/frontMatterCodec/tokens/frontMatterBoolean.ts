@@ -30,6 +30,12 @@ export class FrontMatterBoolean extends FrontMatterValueToken {
 		return new FrontMatterBoolean(token.range, value);
 	}
 
+	/**
+	 * TODO: @legomushroom
+	 */
+	// TODO: @legomushroom - localize?
+	public override readonly valueTypeName = 'boolean';
+
 	public override get text(): string {
 		return `${this.value}`;
 	}

@@ -16,7 +16,7 @@ import { IMarkerData, IMarkerService, MarkerSeverity } from '../../../../../../.
 /**
  * Unique ID of the markers provider class.
  */
-const MARKERS_OWNER_ID = 'reusable-prompts-syntax';
+const MARKERS_OWNER_ID = 'prompts-links-diagnostics-provider';
 
 /**
  * Prompt links diagnostics provider for a single text model.
@@ -33,6 +33,7 @@ class PromptLinkDiagnosticsProvider extends ProviderInstanceBase {
 	/**
 	 * Update diagnostic markers for the current editor.
 	 */
+	// TODO: @legomushroom - add the TS method debounce decorator
 	protected override async onPromptParserUpdate() {
 		// ensure that parsing process is settled
 		await this.parser.allSettled();

@@ -11,6 +11,7 @@ import { FrontMatterToken, FrontMatterRecord } from './tokens/index.js';
 import { BaseDecoder } from '../../../../base/common/codecs/baseDecoder.js';
 import { SimpleDecoder, type TSimpleDecoderToken } from '../simpleCodec/simpleDecoder.js';
 import { PartialFrontMatterRecord, PartialFrontMatterRecordName, PartialFrontMatterRecordNameWithDelimiter } from './parsers/frontMatterRecord.js';
+import { TokenStream } from '../markdownExtensionsCodec/tokens/tokensStream.js';
 
 /**
  * Tokens produced by this decoder.
@@ -28,8 +29,15 @@ export class FrontMatterDecoder extends BaseDecoder<TFrontMatterToken, TSimpleDe
 	private current?: PartialFrontMatterRecordName | PartialFrontMatterRecordNameWithDelimiter | PartialFrontMatterRecord;
 
 	constructor(
-		stream: ReadableStream<VSBuffer>,
+		// TODO: @legomushroom - add unit tests?
+		stream: ReadableStream<VSBuffer> | TokenStream<TSimpleDecoderToken>,
 	) {
+		if (stream instanceof TokenStream) {
+			super(stream);
+
+			return;
+		}
+
 		super(new SimpleDecoder(stream));
 	}
 

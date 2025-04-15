@@ -13,4 +13,9 @@ export abstract class FrontMatterToken extends BaseToken { }
 /**
  * Base class for all tokens that represent a `value` inside a Front Matter header.
  */
-export abstract class FrontMatterValueToken extends FrontMatterToken { }
+export abstract class FrontMatterValueToken extends FrontMatterToken {
+	/**
+	 * TODO: @legomushroom
+	 */
+	public abstract readonly valueTypeName: string;
+}

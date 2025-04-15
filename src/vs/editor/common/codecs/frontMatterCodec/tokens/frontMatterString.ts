@@ -22,6 +22,21 @@ export class FrontMatterString<TQuote extends TQuoteToken = Quote> extends Front
 		super(BaseToken.fullRange(tokens));
 	}
 
+	/**
+	 * TODO: @legomushroom
+	 */
+	// TODO: @legomushroom - localize?
+	public override readonly valueTypeName = 'string';
+
+	/**
+	 * TODO: @legomushroom
+	 */
+	public get cleanText(): string {
+		return BaseToken.render(
+			this.tokens.slice(1, this.tokens.length - 1),
+		);
+	}
+
 	public override get text(): string {
 		return BaseToken.render(this.tokens);
 	}

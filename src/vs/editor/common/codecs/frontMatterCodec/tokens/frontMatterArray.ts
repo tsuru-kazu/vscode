@@ -28,6 +28,27 @@ export class FrontMatterArray extends FrontMatterValueToken {
 		);
 	}
 
+	/**
+	 * TODO: @legomushroom
+	 */
+	public get items(): readonly FrontMatterValueToken[] {
+		const result = [];
+
+		for (const token of this.tokens) {
+			if (token instanceof FrontMatterValueToken) {
+				result.push(token);
+			}
+		}
+
+		return result;
+	}
+
+	/**
+	 * TODO: @legomushroom
+	 */
+	// TODO: @legomushroom - localize?
+	public override readonly valueTypeName = 'array';
+
 	public override get text(): string {
 		return BaseToken.render(this.tokens);
 	}

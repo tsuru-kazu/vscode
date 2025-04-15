@@ -87,11 +87,25 @@ export class FrontMatterRecordDelimiter extends FrontMatterToken {
  */
 export class FrontMatterRecord extends FrontMatterToken {
 	constructor(
-		public readonly tokens: readonly [FrontMatterRecordName, FrontMatterRecordDelimiter, FrontMatterValueToken],
+		private readonly tokens: readonly [FrontMatterRecordName, FrontMatterRecordDelimiter, FrontMatterValueToken],
 	) {
 		super(
 			BaseToken.fullRange(tokens),
 		);
+	}
+
+	/**
+	 * TODO: @legomushroom
+	 */
+	public get nameToken(): FrontMatterRecordName {
+		return this.tokens[0];
+	}
+
+	/**
+	 * TODO: @legomushroom
+	 */
+	public get valueToken(): FrontMatterValueToken {
+		return this.tokens[2];
 	}
 
 	/**

@@ -28,6 +28,7 @@ import { IInstantiationService } from '../../../../../../platform/instantiation/
 import { MarkdownLink } from '../../../../../../editor/common/codecs/markdownCodec/tokens/markdownLink.js';
 import { MarkdownToken } from '../../../../../../editor/common/codecs/markdownCodec/tokens/markdownToken.js';
 import { OpenFailed, NotPromptFile, RecursiveReference, FolderReference, ResolveError } from '../../promptFileReferenceErrors.js';
+import { FrontMatterHeader, PromptHeader } from '../../../../../../editor/common/codecs/markdownExtensionsCodec/tokens/frontMatterHeader.js';
 
 /**
  * Error conditions that may happen during the file reference resolution.
@@ -54,6 +55,18 @@ export class BasePromptParser<TContentsProvider extends IPromptContentsProvider>
 	 * List of file references in the current branch of the file reference tree.
 	 */
 	private readonly _references: IPromptReference[] = [];
+
+	/**
+	 * TODO: @legomushroom
+	 */
+	private promptHeader?: PromptHeader;
+
+	/**
+	 * TODO: @legomushroom
+	 */
+	public get header(): PromptHeader | undefined {
+		return this.promptHeader;
+	}
 
 	/**
 	 * The event is fired when lines or their content change.
@@ -129,6 +142,11 @@ export class BasePromptParser<TContentsProvider extends IPromptContentsProvider>
 		);
 
 		await this.stream.settled;
+
+		// TODO: @legomushroom
+		if (this.promptHeader) {
+			await this.promptHeader.settled;
+		}
 
 		return this;
 	}
@@ -221,6 +239,9 @@ export class BasePromptParser<TContentsProvider extends IPromptContentsProvider>
 		delete this._errorCondition;
 		this.receivedTokens = [];
 
+		this.promptHeader?.dispose();
+		delete this.promptHeader;
+
 		// dispose all currently existing references
 		this.disposeReferences();
 
@@ -244,6 +265,11 @@ export class BasePromptParser<TContentsProvider extends IPromptContentsProvider>
 			// store all markdown and prompt token references
 			if ((token instanceof MarkdownToken) || (token instanceof PromptToken)) {
 				this.receivedTokens.push(token);
+			}
+
+			if (token instanceof FrontMatterHeader) {
+				this.promptHeader = new PromptHeader(token.contentToken);
+				this.promptHeader.start();
 			}
 
 			// try to convert a prompt variable with data token into a file reference
